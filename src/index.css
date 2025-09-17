@@ -1,13 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial,
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Import variable fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;700;800&display=swap');
+
+/* Theme utility classes */
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 font-medium transition-all duration-150 hover:-translate-y-0.5 active:scale-95 focus:outline-none focus:shadow-glow;
+}
+.btn-primary {
+  @apply bg-primary text-white shadow-soft hover:-translate-y-0.5 hover:bg-primary-dark hover:shadow-glow dark:text-white;
+}
+.btn-outline {
+  @apply border border-slate-300 text-ink hover:border-primary hover:text-primary dark:border-slate-700 dark:text-slate-200 dark:hover:text-primary;
+}
+.btn-ghost {
+  @apply text-ink hover:text-primary dark:text-slate-200 dark:hover:text-primary;
+}
+
+.container-section {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+/* Display headline style */
+.headline {
+  @apply font-display tracking-tight;
+}
+
+/* Animated gradient text helper */
+.gradient-text {
+  background: linear-gradient(90deg, #ff66b3, #e20074, #7C3AED, #2563EB, #e20074);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  display: inline-block;
+  animation: gradientX 5s linear infinite;
+}
+
+/* Ensure keyframes exist even if Tailwind purges custom animations */
+@keyframes gradientX {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Card hover shine */
+.shine:before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 -40%;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent);
+  transform: skewX(-12deg);
+  opacity: 0;
+}
+.shine:hover:before {
+  animation: shine 1.2s ease-in-out;
+}
+
+/* Dark mode helpers */
+.surface {
+  @apply bg-white text-ink dark:bg-surface dark:text-slate-200;
+}
+.card {
+  @apply border border-slate-200 bg-white dark:border-slate-700/60 dark:bg-surfaceElev;
+}
+.muted {
+  @apply text-muted dark:text-slate-400;
+}
+
+/* Rain drop background (brand-colored falling dots) */
+.rain-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.rain-overlay .layer {
+  position: absolute;
+  inset: -150% 0 0 0; /* extend upward for seamless loop */
+  transform: skewY(-10deg);
+  opacity: 0.4;
+}
+.dark .rain-overlay .layer { opacity: 0.55; }
+
+/* Use brand color (#e20074) with varying speeds/sizes */
+.rain-overlay .layer-1 {
+  background-image: radial-gradient(2px 10px at 20px 0, rgba(226,0,116,0.22) 50%, transparent 51%);
+  background-size: 140px 70px;
+  animation: rainDown 9s linear infinite;
+}
+.rain-overlay .layer-2 {
+  background-image: radial-gradient(2px 12px at 50px 0, rgba(226,0,116,0.28) 50%, transparent 51%);
+  background-size: 200px 90px;
+  animation: rainDown 7s linear infinite;
+}
+.rain-overlay .layer-3 {
+  background-image: radial-gradient(2px 14px at 90px 0, rgba(226,0,116,0.20) 50%, transparent 51%);
+  background-size: 260px 110px;
+  animation: rainDown 11s linear infinite;
+}
+
+@keyframes rainDown {
+  0% { background-position: 0 -120%; }
+  100% { background-position: 0 120%; }
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* (Removed old tiled rain effect) */
+
+/* Exactly seven falling drops, batch every 15s */
+.rain-7 {
+  position: fixed; /* cover whole screen */
+  inset: 0;
+  pointer-events: none;
+  z-index: 40; /* above content */
+  color: #e20074;
+}
+.dark .rain-7 {
+  color: #e20074;
+}
+.rain-7 .raindrop {
+  position: absolute;
+  top: -60px;
+  /* allow per-drop tuning via CSS variables */
+  --tailW: 2px;
+  --headW: 8px;
+  --headH: 16px;
+  width: var(--tailW); /* tail base width; head added via ::after */
+  height: 60px; /* variable via inline style */
+  background: linear-gradient(to bottom, rgba(226,0,116,0.0), currentColor 60%);
+  opacity: 0.10;
+  border-radius: 9999px;
+  filter: drop-shadow(0 6px 6px rgba(0,0,0,0.08));
+  transform: translateY(0);
+  animation: dropFall 5s linear infinite;
+}
+
+.rain-7 .raindrop::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--headW);
+  height: var(--headH);
+  background: currentColor;
+  border-radius: 60% 60% 60% 60% / 80% 80% 30% 30%; /* teardrop head */
+}
+
+@keyframes dropFall {
+  0% { transform: translateY(-60px); opacity: 0.0; }
+  5% { opacity: 0.12; }
+  80% { transform: translateY(calc(100vh + 40px)); opacity: 0.12; }
+  81% { opacity: 0.0; }
+  100% { transform: translateY(calc(100vh + 40px)); opacity: 0.0; }
 }
