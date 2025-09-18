@@ -94,7 +94,7 @@ function HeroSection({ heroRef, heroY, heroRotate, heroScale }) {
             whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
             viewport={{ once: true, amount: 0.6 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            style={{ y: heroY, rotate: heroRotate, scale: heroScale }}
+            style={{ y: heroY, scale: heroScale }}
           />
         </div>
       </div>
