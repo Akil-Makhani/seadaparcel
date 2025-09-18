@@ -8,9 +8,9 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#e20074', // Brand magenta
-          dark: '#b0005c',
-          light: '#ff66b3',
+          DEFAULT: '#f97316', // Orange 500
+          dark: '#ea580c',    // Orange 600
+          light: '#fdba74',   // Orange 300
         },
         ink: '#0F172A', // dark slate for headings
         muted: '#64748B', // secondary text
@@ -24,7 +24,7 @@ module.exports = {
       },
       boxShadow: {
         soft: '0 10px 30px -12px rgba(16,24,40,0.2)',
-        glow: '0 0 0 6px rgba(226,0,116,0.18)',
+        glow: '0 0 0 6px rgba(249,115,22,0.18)',
       },
       keyframes: {
         float: {

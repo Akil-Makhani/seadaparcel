@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
     <footer
@@ -25,18 +27,18 @@ export default function Footer() {
           >
             How it Works
           </a>
-          <a
-            href='#'
+          <Link
+            to='/faqs'
             className='transition-colors hover:text-primary dark:text-slate-300 dark:hover:text-primary'
           >
             FAQs
-          </a>
-          <a
-            href='#'
+          </Link>
+          <Link
+            to='/terms'
             className='transition-colors hover:text-primary dark:text-slate-300 dark:hover:text-primary'
           >
             Terms
-          </a>
+          </Link>
           <a
             href='#'
             className='transition-colors hover:text-primary dark:text-slate-300 dark:hover:text-primary'
