@@ -45,12 +45,12 @@ export default function Footer() {
           >
             Privacy
           </a>
-          <a
-            href='#'
+          <Link
+            to='/contact'
             className='transition-colors hover:text-primary dark:text-slate-300 dark:hover:text-primary'
           >
             Contact
-          </a>
+          </Link>
         </nav>
       </div>
     </footer>

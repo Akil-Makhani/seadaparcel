@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-import toast from "react-hot-toast";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 // Icons: will gracefully fallback if lucide-react isn't installed
@@ -125,7 +123,7 @@ function StepItem({ step, index }) {
 
 function StepsSection() {
   return (
-    <section id='how' className='container-section py-16 md:py-24'>
+    <section id='how' className='container-section py-16 md:py-0 md:mb-10'>
       <h2 className='text-center font-display text-2xl md:text-3xl font-bold'>
         HOW IT WORKS
       </h2>

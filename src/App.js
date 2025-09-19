@@ -7,11 +7,13 @@ import {
 import Home from "./pages/home";
 import FAQs from "./pages/faqs";
 import Terms from "./pages/terms";
+import Contact from "./pages/contact";
 import { useEffect } from "react";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import "./nprogress-overrides.css";
 import Login from "./pages/login";
+import Register from "./pages/register";
 import { Toaster } from "react-hot-toast";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -49,8 +51,10 @@ export default function App() {
             <Routes>
               <Route index element={<Home />} />
               <Route path='/login' element={<Login />} />
+              <Route path='/register' element={<Register />} />
               <Route path='/faqs' element={<FAQs />} />
               <Route path='/terms' element={<Terms />} />
+              <Route path='/contact' element={<Contact />} />
             </Routes>
           </main>
           <Footer />
