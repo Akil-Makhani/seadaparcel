@@ -1,4 +1,5 @@
 import { motion, useScroll } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const TERMS_TEXT = `
 1. Definitions
@@ -327,15 +328,14 @@ function renderStyledTerms(text) {
 export default function Terms() {
   const { scrollYProgress } = useScroll();
   return (
-    <div className="min-h-screen flex flex-col bg-white text-ink dark:bg-surface dark:text-slate-200">
+    <div key="terms-page" className="min-h-screen flex flex-col bg-white text-ink dark:bg-surface dark:text-slate-200">
       <section className="relative overflow-hidden surface">
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-sky to-white dark:from-[#0B1220] dark:to-[#0B1220]" />
         <motion.div className="fixed left-0 right-0 top-0 h-1 origin-left bg-primary/80 z-40" style={{ scaleX: scrollYProgress }} />
         <div className="container-section py-14 md:py-20">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.6 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="text-center"
           >
@@ -362,18 +362,17 @@ export default function Terms() {
           <motion.div
             className="mt-12 md:mt-16 flex items-center justify-center"
             initial={{ opacity: 0, scale: 0.96 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <a href="#contact" className="btn btn-outline">Contact support</a>
+            <Link to="/contact" className="btn btn-primary shine">Contact support</Link>
           </motion.div>
           <motion.button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="fixed bottom-6 right-6 z-40 inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white shadow-soft hover:shadow-glow transition-all"
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
             aria-label="Back to top"
           >
             ↑

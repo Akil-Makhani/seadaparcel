@@ -10,7 +10,10 @@ export default function Header() {
             <img
               src='/images/logo_2.png'
               alt='SendAParcel'
-              className='h-28 w-auto md:h-32 block'
+              className='h-36 w-auto md:h-40 block'
+              loading='eager'
+              decoding='async'
+              fetchPriority='high'
             />
           </Link>
         </div>
@@ -18,12 +21,9 @@ export default function Header() {
           <Link to='/login' className='btn btn-ghost text-sm'>
             Login
           </Link>
-          <button
-            className='btn btn-primary text-sm'
-            onClick={() => toast.success("Welcome to SendAParcel 🚚")}
-          >
+          <Link to='/register' className='btn btn-primary text-sm'>
             Create account
-          </button>
+          </Link>
         </div>
       </div>
     </header>

@@ -30,11 +30,33 @@ const STEPS_DATA = [
 const ANIMATION_VARIANTS = {
   stepsContainer: {
     hidden: {},
-    show: { transition: { staggerChildren: 0.15, delayChildren: 0.1 } },
+    show: { 
+      transition: { 
+        staggerChildren: 0.3,  // 0.3s delay between each step (faster)
+        delayChildren: 0.1     // 0.1s delay before first step (almost immediate)
+      } 
+    },
   },
   stepItem: {
-    hidden: { opacity: 0, y: 24 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+    hidden: { 
+      opacity: 0, 
+      y: 30, 
+      scale: 0.8,
+      rotateX: -15
+    },
+    show: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1,
+      rotateX: 0,
+      transition: { 
+        duration: 0.5, 
+        ease: "easeOut",
+        type: "spring",
+        stiffness: 120,
+        damping: 12
+      } 
+    },
   },
 };
 
@@ -46,8 +68,7 @@ function HeroSection({ heroRef, heroY, heroRotate, heroScale }) {
         <motion.div
           className='space-y-6'
           initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.6 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
         >
           <h1 className='headline text-4xl md:text-6xl font-extrabold leading-tight'>
@@ -84,16 +105,23 @@ function HeroSection({ heroRef, heroY, heroRotate, heroScale }) {
         </motion.div>
         <div className='relative'>
           <div className='absolute -left-10 -top-10 h-40 w-40 rounded-full bg-primary/20 blur-2xl' />
-          <motion.img
-            src='/images/hero4.png'
-            alt='Courier route'
-            className='mx-auto w-full max-w-xl md:max-w-2xl'
-            initial={{ opacity: 0, scale: 0.9, rotate: -3 }}
-            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-            viewport={{ once: true, amount: 0.6 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            style={{ y: heroY, scale: heroScale }}
-          />
+          <div className='mx-auto w-full max-w-xl md:max-w-2xl bg-slate-100 dark:bg-slate-800 rounded-2xl animate-pulse'>
+            <motion.img
+              src='/images/hero4.png'
+              alt='Courier route'
+              className='mx-auto w-full max-w-xl md:max-w-2xl rounded-2xl'
+              initial={{ opacity: 0, scale: 0.9, rotate: -3 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              style={{ y: heroY, scale: heroScale }}
+              loading='eager'
+              decoding='async'
+              fetchPriority='high'
+              onLoad={(e) => {
+                e.target.parentElement.classList.remove('animate-pulse', 'bg-slate-100', 'dark:bg-slate-800');
+              }}
+            />
+          </div>
         </div>
       </div>
     </section>
@@ -108,9 +136,43 @@ function StepItem({ step, index }) {
       className='flex flex-col items-stretch text-center flex-1 min-w-[220px]'
     >
       <div className='card relative rounded-2xl p-6 shadow-soft hover:shadow-glow border border-primary hover:border-primary bg-white dark:border-primary dark:hover:border-primary/80 dark:bg-surfaceElev h-full transition-all duration-200 hover:-translate-y-1'>
-        <span className='absolute top-3 left-3 inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary text-white font-semibold text-xs shadow-soft'>
+        <motion.span 
+          className='absolute top-3 left-3 inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary text-white font-semibold text-xs shadow-soft'
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ 
+            scale: 1, 
+            rotate: 0,
+            boxShadow: [
+              "0 0 0 0 rgba(249, 115, 22, 0.7)",
+              "0 0 0 10px rgba(249, 115, 22, 0)",
+              "0 0 0 0 rgba(249, 115, 22, 0)"
+            ]
+          }}
+          transition={{ 
+            scale: { 
+              duration: 0.4, 
+              delay: 0.1,
+              type: "spring",
+              stiffness: 200,
+              damping: 10
+            },
+            rotate: { 
+              duration: 0.4, 
+              delay: 0.1,
+              type: "spring",
+              stiffness: 200,
+              damping: 10
+            },
+            boxShadow: {
+              duration: 1.5,
+              repeat: Infinity,
+              repeatDelay: 2,
+              delay: 0.3
+            }
+          }}
+        >
           {index + 1}
-        </span>
+        </motion.span>
         <div className='inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary shadow-soft mx-auto'>
           {Icon ? <Icon size={22} /> : <span className='font-bold'>{index + 1}</span>}
         </div>
@@ -123,17 +185,23 @@ function StepItem({ step, index }) {
 
 function StepsSection() {
   return (
-    <section id='how' className='container-section py-16 md:py-0 md:mb-10'>
-      <h2 className='text-center font-display text-2xl md:text-3xl font-bold'>
+    <section key="how-it-works-section" id='how' className='container-section py-16 md:py-0 md:mb-10'>
+      <motion.h2 
+        className='text-center font-display text-2xl md:text-3xl font-bold'
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.3 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
         HOW IT WORKS
-      </h2>
+      </motion.h2>
       <div className='relative mt-10'>
         <motion.ol
           className='flex flex-wrap md:flex-nowrap items-stretch justify-center gap-6 md:gap-10'
           variants={ANIMATION_VARIANTS.stepsContainer}
           initial='hidden'
           whileInView='show'
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: false, amount: 0.2 }}
         >
           {STEPS_DATA.map((step, index) => (
             <StepItem key={step.title} step={step} index={index} />
@@ -155,7 +223,7 @@ export default function Home() {
   const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.05]);
 
   return (
-    <div className='min-h-screen flex flex-col bg-white text-ink dark:bg-surface dark:text-slate-200'>
+    <div key="home-page" className='min-h-screen flex flex-col bg-white text-ink dark:bg-surface dark:text-slate-200'>
       <HeroSection
         heroRef={heroRef}
         heroY={heroY}

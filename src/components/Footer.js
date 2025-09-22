@@ -21,12 +21,12 @@ export default function Footer() {
           </span>
         </div>
         <nav className='flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted'>
-          <a
-            href='#'
+          <Link
+            to='/#how'
             className='transition-colors hover:text-primary dark:text-slate-300 dark:hover:text-primary'
           >
             How it Works
-          </a>
+          </Link>
           <Link
             to='/faqs'
             className='transition-colors hover:text-primary dark:text-slate-300 dark:hover:text-primary'
@@ -39,12 +39,12 @@ export default function Footer() {
           >
             Terms
           </Link>
-          <a
-            href='#'
+          <Link
+            to='/privacy'
             className='transition-colors hover:text-primary dark:text-slate-300 dark:hover:text-primary'
           >
             Privacy
-          </a>
+          </Link>
           <Link
             to='/contact'
             className='transition-colors hover:text-primary dark:text-slate-300 dark:hover:text-primary'

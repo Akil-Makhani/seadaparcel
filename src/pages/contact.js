@@ -10,7 +10,7 @@ export default function Contact() {
   const INPUT =
     "w-full px-4 py-3 border border-slate-200 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all";
   return (
-    <div className='min-h-screen flex flex-col bg-white text-ink dark:bg-surface dark:text-slate-200'>
+    <div key="contact-page" className='min-h-screen flex flex-col bg-white text-ink dark:bg-surface dark:text-slate-200'>
       {/* Hero */}
       <section className='relative overflow-hidden surface'>
         <div className='absolute inset-0 -z-10 bg-gradient-to-b from-sky to-white dark:from-[#0B1220] dark:to-[#0B1220]' />
@@ -18,8 +18,7 @@ export default function Contact() {
           <motion.div
             variants={ANIMATION.fadeUp}
             initial='hidden'
-            whileInView='show'
-            viewport={{ once: true, amount: 0.6 }}
+            animate='show'
             transition={{ duration: 0.6, ease: 'easeOut' }}
             className='text-center'
           >
@@ -38,8 +37,8 @@ export default function Contact() {
           <motion.div
             variants={ANIMATION.stagger}
             initial='hidden'
-            whileInView='show'
-            viewport={{ once: true, amount: 0.2 }}
+            animate='show'
+            transition={{ duration: 0.5, staggerChildren: 0.12, delay: 0.2 }}
             className='mt-12 md:mt-16 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start'
           >
             {/* Left: Info Cards */}

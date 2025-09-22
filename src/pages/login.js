@@ -95,7 +95,7 @@ export default function Login() {
   };
 
   return (
-    <div className='min-h-screen flex bg-gradient-to-br from-sky via-white to-blue-50 dark:from-[#0B1220] dark:via-[#0B1220] dark:to-[#1a1a2e]'>
+    <div key="login-page" className='min-h-screen flex bg-gradient-to-br from-sky via-white to-blue-50 dark:from-[#0B1220] dark:via-[#0B1220] dark:to-[#1a1a2e]'>
       {/* Left Side - Process Illustration */}
       <motion.div
         className='hidden lg:flex lg:w-1/2 relative overflow-hidden'
@@ -175,7 +175,10 @@ export default function Login() {
                 <img
                   src='/images/logo_2.png'
                   alt='SendAParcel'
-                  className='h-28 w-auto md:h-28'
+                  className='h-36 w-auto md:h-36'
+                  loading='eager'
+                  decoding='async'
+                  fetchPriority='high'
                 />
               </motion.div>
 
@@ -209,7 +212,7 @@ export default function Login() {
                   name='email'
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={`w-full h-12 pl-10 pr-4 border rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none transition-all ${errors.email ? 'border-red-500 focus:ring-2 focus:ring-red-200 focus:border-red-500' : 'border-slate-200 dark:border-slate-600 focus:ring-2 focus:ring-primary/20 focus:border-primary'}`}
+                  className={`w-full pl-10 pr-4 px-4 py-1.5 border rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none transition-all ${errors.email ? 'border-red-500 focus:ring-2 focus:ring-red-200 focus:border-red-500' : 'border-slate-200 dark:border-slate-600 focus:ring-2 focus:ring-primary/20 focus:border-primary'}`}
                   placeholder='Enter your email'
                 />
               </div>
@@ -232,7 +235,7 @@ export default function Login() {
                   name='password'
                   value={formData.password}
                   onChange={handleInputChange}
-                  className={`w-full h-12 pl-10 pr-12 border rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none transition-all ${errors.password ? 'border-red-500 focus:ring-2 focus:ring-red-200 focus:border-red-500' : 'border-slate-200 dark:border-slate-600 focus:ring-2 focus:ring-primary/20 focus:border-primary'}`}
+                  className={`w-full  pl-10 pr-12 px-4 py-1.5 border rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none transition-all ${errors.password ? 'border-red-500 focus:ring-2 focus:ring-red-200 focus:border-red-500' : 'border-slate-200 dark:border-slate-600 focus:ring-2 focus:ring-primary/20 focus:border-primary'}`}
                   placeholder='Enter your password'
                 />
                 <button
@@ -277,7 +280,7 @@ export default function Login() {
             {/* Submit Button */}
             <motion.button
               type='submit'
-              className='w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group shadow-lg hover:shadow-xl'
+              className='w-full btn btn-primary flex items-center justify-center gap-2 group'
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >

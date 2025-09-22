@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const FAQ_ITEMS = [
   {
@@ -47,6 +48,9 @@ function FaqItem({ item, index, isOpen, onToggle }) {
       layout
       className="mb-4 break-inside-avoid list-none"
       variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      transition={{ duration: 0.3 }}
     >
       <div className="group rounded-2xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-surfaceElev p-5 md:p-6 shadow-soft hover:shadow-glow/20 transition-shadow">
         <button
@@ -89,20 +93,24 @@ function FaqItem({ item, index, isOpen, onToggle }) {
 
 export default function FAQs() {
   const items = useMemo(() => FAQ_ITEMS, []);
-  const [openIndex, setOpenIndex] = useState(0);
+  const [openIndex, setOpenIndex] = useState(-1); // Start with no item open
   const handleToggle = useCallback((idx) => {
     setOpenIndex((current) => (current === idx ? -1 : idx));
   }, []);
 
+  // Reset state when component mounts to ensure consistent behavior
+  useEffect(() => {
+    setOpenIndex(-1);
+  }, []);
+
   return (
-    <div className="min-h-screen flex flex-col bg-white text-ink dark:bg-surface dark:text-slate-200">
+    <div key="faqs-page" className="min-h-screen flex flex-col bg-white text-ink dark:bg-surface dark:text-slate-200">
       <section className="relative overflow-hidden surface">
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-sky to-white dark:from-[#0B1220] dark:to-[#0B1220]" />
         <div className="container-section py-14 md:py-20">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.6 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="text-center"
           >
@@ -122,6 +130,7 @@ export default function FAQs() {
             variants={containerVariants}
             initial="hidden"
             animate="show"
+            transition={{ duration: 0.5, staggerChildren: 0.1 }}
           >
             {items.map((item, idx) => (
               <FaqItem
@@ -137,11 +146,10 @@ export default function FAQs() {
           <motion.div
             className="mt-12 md:mt-16 flex items-center justify-center"
             initial={{ opacity: 0, scale: 0.96 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <a href="#contact" className="btn btn-primary shine">Still need help? Contact us</a>
+            <Link to="/contact" className="btn btn-primary shine">Still need help? Contact us</Link>
           </motion.div>
         </div>
       </section>

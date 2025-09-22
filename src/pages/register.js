@@ -44,6 +44,7 @@ export default function Register() {
     confirmPassword: "",
     address: "",
     street: "",
+    unit: "",
     suburb: "",
     city: "",
     postcode: "",
@@ -51,7 +52,7 @@ export default function Register() {
   const [errors, setErrors] = useState({});
 
   const inputClass = (hasError) =>
-    `w-full px-4 py-3 border rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none transition-all ${
+    `w-full px-4 py-1.5 border rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none transition-all ${
       hasError
         ? "border-red-500 focus:ring-2 focus:ring-red-200 focus:border-red-500"
         : "border-slate-200 dark:border-slate-600 focus:ring-2 focus:ring-primary/20 focus:border-primary"
@@ -79,6 +80,12 @@ export default function Register() {
     if (!formData.password) nextErrors.password = "Password is required.";
     if (!formData.confirmPassword) nextErrors.confirmPassword = "Confirm your password.";
     else if (formData.password !== formData.confirmPassword) nextErrors.confirmPassword = "Passwords do not match.";
+    if (!formData.address) nextErrors.address = "Address is required.";
+    if (!formData.street) nextErrors.street = "Street is required.";
+    if (!formData.unit) nextErrors.unit = "Unit is required.";
+    if (!formData.suburb) nextErrors.suburb = "Suburb is required.";
+    if (!formData.city) nextErrors.city = "City is required.";
+    if (!formData.postcode) nextErrors.postcode = "Postcode is required.";
 
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length) return;
@@ -87,8 +94,73 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-sky via-white to-blue-50 dark:from-[#0B1220] dark:via-[#0B1220] dark:to-[#1a1a2e]">
-      {/* Left Side - Registration Form */}
+    <div key="register-page" className="min-h-screen flex bg-gradient-to-br from-sky via-white to-blue-50 dark:from-[#0B1220] dark:via-[#0B1220] dark:to-[#1a1a2e]">
+      {/* Left Side - Benefits */}
+      <motion.div 
+        className="hidden lg:flex lg:w-1/2 relative overflow-hidden"
+        initial="hidden"
+        animate="show"
+        variants={ANIMATION_VARIANTS.container}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-blue-500/10" />
+        
+        {/* Benefits Section */}
+        <div className="relative z-10 flex flex-col justify-center items-center w-full px-12">
+          <motion.div
+            variants={ANIMATION_VARIANTS.item}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl font-bold text-slate-800 dark:text-white mb-4">
+              Why Choose Us?
+            </h2>
+            <p className="text-slate-600 dark:text-slate-300">
+              Join thousands of satisfied customers
+            </p>
+          </motion.div>
+
+          <div className="space-y-6 w-full max-w-sm">
+            {BENEFITS.map((benefit, index) => {
+              const Icon = benefit.icon;
+              return (
+                <motion.div
+                  key={benefit.text}
+                  variants={ANIMATION_VARIANTS.slideIn}
+                  className="flex items-center gap-4 group"
+                >
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center group-hover:bg-primary/30 transition-colors">
+                      <Icon className="w-6 h-6 text-primary" />
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-slate-800 dark:text-white">
+                      {benefit.text}
+                    </p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Decorative Map */}
+          <motion.div
+            variants={ANIMATION_VARIANTS.item}
+            className="mt-12 relative"
+          >
+            <div className="w-64 h-40 bg-gradient-to-br from-primary/10 to-blue-500/10 rounded-2xl flex items-center justify-center">
+              <Building className="w-16 h-16 text-primary/60" />
+            </div>
+            <div className="absolute -top-4 -right-4 w-8 h-8 bg-primary/20 rounded-full animate-pulse" />
+            <div className="absolute -bottom-2 -left-2 w-6 h-6 bg-blue-500/20 rounded-full animate-pulse delay-500" />
+          </motion.div>
+        </div>
+
+        {/* Decorative Elements */}
+        <div className="absolute top-20 right-20 w-32 h-32 rounded-full bg-primary/5 animate-pulse" />
+        <div className="absolute bottom-32 left-16 w-24 h-24 rounded-full bg-blue-500/5 animate-pulse delay-1000" />
+      </motion.div>
+
+      {/* Right Side - Registration Form */}
       <div className="flex-1 flex items-center justify-center p-8">
         <motion.div
           className="w-full max-w-2xl"
@@ -107,7 +179,10 @@ export default function Register() {
               <img
                 src='/images/logo_2.png'
                 alt='SendAParcel'
-                className='h-28 w-auto md:h-28'
+                className='h-36 w-auto md:h-36'
+                loading='eager'
+                decoding='async'
+                fetchPriority='high'
               />
             </motion.div>
             
@@ -266,7 +341,7 @@ export default function Register() {
               
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                  Address Lookup
+                  Address Lookup *
                 </label>
                 <div className="relative">
                   <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -275,69 +350,91 @@ export default function Register() {
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
-                    className={inputClass(false)}
+                    className={`${inputClass(!!errors.address)} pl-10 pr-4`}
                     placeholder="Search for your address"
                   />
                 </div>
+                {errors.address && <p className="mt-1 text-xs text-red-600">{errors.address}</p>}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                    Street
+                    Street *
                   </label>
                   <input
                     type="text"
                     name="street"
                     value={formData.street}
                     onChange={handleInputChange}
-                    className={inputClass(false)}
+                    className={`${inputClass(!!errors.street)} pl-4 pr-4`}
                     placeholder="Street address"
                   />
+                  {errors.street && <p className="mt-1 text-xs text-red-600">{errors.street}</p>}
                 </div>
 
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                    Suburb
+                    Unit *
                   </label>
                   <input
                     type="text"
-                    name="suburb"
-                    value={formData.suburb}
+                    name="unit"
+                    value={formData.unit}
                     onChange={handleInputChange}
-                    className={inputClass(false)}
-                    placeholder="Suburb"
+                    className={`${inputClass(!!errors.unit)} pl-4 pr-4`}
+                    placeholder="Unit number"
                   />
+                  {errors.unit && <p className="mt-1 text-xs text-red-600">{errors.unit}</p>}
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                    City
+                    Suburb *
+                  </label>
+                  <input
+                    type="text"
+                    name="suburb"
+                    value={formData.suburb}
+                    onChange={handleInputChange}
+                    className={`${inputClass(!!errors.suburb)} pl-4 pr-4`}
+                    placeholder="Suburb"
+                  />
+                  {errors.suburb && <p className="mt-1 text-xs text-red-600">{errors.suburb}</p>}
+              </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                    City *
                   </label>
                   <input
                     type="text"
                     name="city"
                     value={formData.city}
                     onChange={handleInputChange}
-                    className={inputClass(false)}
+                    className={`${inputClass(!!errors.city)} pl-4 pr-4`}
                     placeholder="City"
                   />
+                  {errors.city && <p className="mt-1 text-xs text-red-600">{errors.city}</p>}
+                </div>
                 </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                    Postcode
+                    Postcode *
                   </label>
                   <input
                     type="text"
                     name="postcode"
                     value={formData.postcode}
                     onChange={handleInputChange}
-                    className={inputClass(false)}
+                    className={`${inputClass(!!errors.postcode)} pl-4 pr-4`}
                     placeholder="Postcode"
                   />
+                  {errors.postcode && <p className="mt-1 text-xs text-red-600">{errors.postcode}</p>}
                 </div>
               </div>
             </div>
@@ -345,7 +442,7 @@ export default function Register() {
             {/* Submit Button */}
             <motion.button
               type="submit"
-              className="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group shadow-lg hover:shadow-xl"
+              className="w-full btn btn-primary flex items-center justify-center gap-2 group"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -369,70 +466,6 @@ export default function Register() {
         </motion.div>
       </div>
 
-      {/* Right Side - Benefits */}
-      <motion.div 
-        className="hidden lg:flex lg:w-1/2 relative overflow-hidden"
-        initial="hidden"
-        animate="show"
-        variants={ANIMATION_VARIANTS.container}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-blue-500/10" />
-        
-        {/* Benefits Section */}
-        <div className="relative z-10 flex flex-col justify-center items-center w-full px-12">
-          <motion.div
-            variants={ANIMATION_VARIANTS.item}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl font-bold text-slate-800 dark:text-white mb-4">
-              Why Choose Us?
-            </h2>
-            <p className="text-slate-600 dark:text-slate-300">
-              Join thousands of satisfied customers
-            </p>
-          </motion.div>
-
-          <div className="space-y-6 w-full max-w-sm">
-            {BENEFITS.map((benefit, index) => {
-              const Icon = benefit.icon;
-              return (
-                <motion.div
-                  key={benefit.text}
-                  variants={ANIMATION_VARIANTS.slideIn}
-                  className="flex items-center gap-4 group"
-                >
-                  <div className="flex-shrink-0">
-                    <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center group-hover:bg-primary/30 transition-colors">
-                      <Icon className="w-6 h-6 text-primary" />
-                    </div>
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-slate-800 dark:text-white">
-                      {benefit.text}
-                    </p>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-
-          {/* Decorative Map */}
-          <motion.div
-            variants={ANIMATION_VARIANTS.item}
-            className="mt-12 relative"
-          >
-            <div className="w-64 h-40 bg-gradient-to-br from-primary/10 to-blue-500/10 rounded-2xl flex items-center justify-center">
-              <Building className="w-16 h-16 text-primary/60" />
-            </div>
-            <div className="absolute -top-4 -right-4 w-8 h-8 bg-primary/20 rounded-full animate-pulse" />
-            <div className="absolute -bottom-2 -left-2 w-6 h-6 bg-blue-500/20 rounded-full animate-pulse delay-500" />
-          </motion.div>
-        </div>
-
-        {/* Decorative Elements */}
-        <div className="absolute top-20 right-20 w-32 h-32 rounded-full bg-primary/5 animate-pulse" />
-        <div className="absolute bottom-32 left-16 w-24 h-24 rounded-full bg-blue-500/5 animate-pulse delay-1000" />
-      </motion.div>
     </div>
   );
 }
