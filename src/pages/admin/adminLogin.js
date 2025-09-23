@@ -13,8 +13,8 @@ import {
   Printer,
 } from "lucide-react";
 import toast from "react-hot-toast";
-import { logInApi } from "../services/apiFlow";
-import Loader from "../components/loader";
+import { logInApi } from "../../services/apiFlow";
+import Loader from "../../components/loader";
 
 const ANIMATION_VARIANTS = {
   container: {
@@ -39,28 +39,28 @@ const ANIMATION_VARIANTS = {
 
 const STEPS_DATA = [
   {
-    title: "Create or log in",
-    desc: "Log in/Sign up to the Send-a-Parcel online cloud-based system.",
+    title: "User Management",
+    desc: "Add, remove and manage customer and staff accounts.",
     icon: UserPlus,
   },
   {
-    title: "Choose addresses",
-    desc: "Choose a shipping option and enter the address details for delivery.",
+    title: "Address Oversight",
+    desc: "Monitor address lookups and resolve validation exceptions.",
     icon: MapPin,
   },
   {
-    title: "Add Packages",
-    desc: "Add the weight and packaging dimensions of the item you are sending.",
+    title: "Operations",
+    desc: "Review parcel activity and daily operational metrics.",
     icon: Package,
   },
   {
-    title: "Print & handover",
-    desc: "Print out a label and stick it on the parcel. The courier is already notified.",
+    title: "Reports & Audit",
+    desc: "Generate reports and review audit trails for compliance.",
     icon: Printer,
   },
 ];
 
-export default function Login() {
+export default function AdminLogin() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -104,7 +104,7 @@ export default function Login() {
       const response = await logInApi(payload);
       if (response?.data?.success) {
         toast.success("Login successful! Welcome back 🚚");
-        navigate('/dashboard');
+        navigate('/admin/dashboard');
       } else {
         const message = response?.data?.message || "Login failed";
         toast.error(message);
@@ -120,7 +120,7 @@ export default function Login() {
   return (
     <>
     <Loader open={isLoading} />
-    <div key="login-page" className='min-h-screen flex bg-gradient-to-br from-sky via-white to-blue-50 dark:from-[#0B1220] dark:via-[#0B1220] dark:to-[#1a1a2e]'>
+    <div key="admin-login-page" className='min-h-screen flex bg-gradient-to-br from-sky via-white to-blue-50 dark:from-[#0B1220] dark:via-[#0B1220] dark:to-[#1a1a2e]'>
       {/* Left Side - Process Illustration */}
       <motion.div
         className='hidden lg:flex lg:w-1/2 relative overflow-hidden'
@@ -137,10 +137,10 @@ export default function Login() {
             className='text-center mb-12'
           >
             <h2 className='text-3xl font-bold text-slate-800 dark:text-white mb-4'>
-              How It Works
+              Admin Console
             </h2>
             <p className='text-slate-600 dark:text-slate-300'>
-              Simple steps to send your parcel
+              Manage platform configuration and operations
             </p>
           </motion.div>
 
@@ -208,10 +208,10 @@ export default function Login() {
               </motion.div>
 
               <h1 className='text-3xl font-bold text-slate-800 dark:text-white mb-2'>
-                Welcome Back
+                Admin Login
               </h1>
             <p className='text-slate-600 dark:text-slate-300'>
-              Sign in to your account to continue
+              Sign in to your administrator account
             </p>
           </div>
 
@@ -309,20 +309,17 @@ export default function Login() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              Sign In
+              Admin Sign In
               <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
             </motion.button>
 
-            {/* Sign Up Link */}
+            {/* Back to user login */}
             <div className='text-center'>
-              <span className='text-slate-600 dark:text-slate-300'>
-                Don't have an account?{" "}
-              </span>
               <Link
-                to='/register'
+                to='/login'
                 className='text-primary hover:text-primary-dark font-semibold transition-colors'
               >
-                Sign up here
+                Back to user login
               </Link>
             </div>
           </motion.form>

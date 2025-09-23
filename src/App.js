@@ -18,6 +18,9 @@ import Register from "./pages/register";
 import { Toaster } from "react-hot-toast";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import AdminLogin from "./pages/admin/adminLogin";
+import UserDashboard from "./pages/dashboard/UserDashboard";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 function AppContent() {
   const location = useLocation();
@@ -86,6 +89,9 @@ function AppContent() {
             <Route path='/terms' element={<Terms />} />
             <Route path='/privacy' element={<Privacy />} />
             <Route path='/contact' element={<Contact />} />
+            <Route path='/admin/login' element={<AdminLogin />} />
+            <Route path='/dashboard' element={<UserDashboard />} />
+            <Route path='/admin/dashboard' element={<AdminDashboard />} />
           </Routes>
         </main>
         <Footer />
