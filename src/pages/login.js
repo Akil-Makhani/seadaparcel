@@ -13,6 +13,8 @@ import {
   Printer,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import { logInApi } from "../services/apiFlow";
+import Loader from "../components/loader";
 
 const ANIMATION_VARIANTS = {
   container: {
@@ -66,6 +68,7 @@ export default function Login() {
     rememberMe: false,
   });
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -78,7 +81,7 @@ export default function Login() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const nextErrors = {};
     if (!formData.email) {
@@ -91,10 +94,30 @@ export default function Login() {
     }
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length) return;
-    toast.success("Login successful! Welcome back 🚚");
+    const payload = {
+      Email: formData.email,
+      Password: formData.password,
+    };
+    setIsLoading(true);
+    try {
+      const response = await logInApi(payload);
+      if (response?.data?.success) {
+        toast.success("Login successful! Welcome back 🚚");
+      } else {
+        const message = response?.data?.message || "Login failed";
+        toast.error(message);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Failed to login. Please try again.");
+    }finally {
+      setIsLoading(false);
+    }
   };
 
   return (
+    <>
+    <Loader open={isLoading} />
     <div key="login-page" className='min-h-screen flex bg-gradient-to-br from-sky via-white to-blue-50 dark:from-[#0B1220] dark:via-[#0B1220] dark:to-[#1a1a2e]'>
       {/* Left Side - Process Illustration */}
       <motion.div
@@ -173,9 +196,9 @@ export default function Login() {
                 className='inline-flex items-center gap-3 '
               >
                 <img
-                  src='/images/logo_2.png'
+                  src='/images/logo_4.png'
                   alt='SendAParcel'
-                  className='h-36 w-auto md:h-36'
+                  className='h-36 w-auto md:h-40 '
                   loading='eager'
                   decoding='async'
                   fetchPriority='high'
@@ -304,5 +327,6 @@ export default function Login() {
         </motion.div>
       </div>
     </div>
+    </>
   );
 }
