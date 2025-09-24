@@ -13,8 +13,9 @@ import {
   Printer,
 } from "lucide-react";
 import toast from "react-hot-toast";
-import { logInApi } from "../../services/apiFlow";
 import Loader from "../../components/loader";
+import { adminLogInApi } from "../../services/adminApiFlow";
+import { setItemLocalStorage, setToken } from "../../utils/browserSetting";
 
 const ANIMATION_VARIANTS = {
   container: {
@@ -101,8 +102,11 @@ export default function AdminLogin() {
     };
     setIsLoading(true);
     try {
-      const response = await logInApi(payload);
+      const response = await adminLogInApi(payload);
       if (response?.data?.success) {
+        const token = response?.data?.data?.token || response?.data?.token || "admin-demo-token";
+        setToken(token);
+        setItemLocalStorage("role", response?.data?.role);
         toast.success("Login successful! Welcome back 🚚");
         navigate('/admin/dashboard');
       } else {

@@ -1,6 +1,31 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getItemLocalStorage, removeItemLocalStorage } from "../utils/browserSetting.jsx";
 
 export default function Header() {
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(!!getItemLocalStorage('token'));
+  const [role, setRole] = useState(getItemLocalStorage('role'));
+
+  useEffect(() => {
+    const onStorage = () => {
+      setIsLoggedIn(!!getItemLocalStorage('token'));
+      setRole(getItemLocalStorage('role'));
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
+  const handleLogout = () => {
+    removeItemLocalStorage('token');
+    removeItemLocalStorage('role');
+    setIsLoggedIn(false);
+    setRole(null);
+    navigate('/');
+  };
+
+  const accountPath = role === 'admin' ? '/admin/dashboard' : '/dashboard';
+
   return (
     <header className='sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-100'>
       <div className='container-section flex h-20 items-center justify-between'>
@@ -17,12 +42,25 @@ export default function Header() {
           </Link>
         </div>
         <div className='flex items-center gap-3'>
-          <Link to='/login' className='btn btn-ghost text-sm'>
-            Login
-          </Link>
-          <Link to='/register' className='btn btn-primary text-sm'>
-            Create account
-          </Link>
+          {isLoggedIn ? (
+            <>
+              <Link to={accountPath} className='btn btn-ghost text-sm'>
+                Account
+              </Link>
+              <button onClick={handleLogout} className='btn btn-primary text-sm'>
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to='/login' className='btn btn-ghost text-sm'>
+                Login
+              </Link>
+              <Link to='/register' className='btn btn-primary text-sm'>
+                Create account
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>

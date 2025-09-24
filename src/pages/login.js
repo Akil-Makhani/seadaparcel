@@ -15,6 +15,7 @@ import {
 import toast from "react-hot-toast";
 import { logInApi } from "../services/apiFlow";
 import Loader from "../components/loader";
+import { setItemLocalStorage, setToken } from "../utils/browserSetting";
 
 const ANIMATION_VARIANTS = {
   container: {
@@ -103,6 +104,9 @@ export default function Login() {
     try {
       const response = await logInApi(payload);
       if (response?.data?.success) {
+        const token = response?.data?.data?.token || response?.data?.token || "user-demo-token";
+        setToken(token);
+        setItemLocalStorage("role", response?.data?.data?.role);
         toast.success("Login successful! Welcome back 🚚");
         navigate('/dashboard');
       } else {
@@ -131,7 +135,7 @@ export default function Login() {
         <div className='absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-blue-500/10' />
 
         {/* Process Steps */}
-        <div className='relative z-10 flex flex-col justify-center items-center w-full px-12'>
+        <div className='relative z-10 flex flex-col justify-center items-center w-full px-12 mt-6'>
           <motion.div
             variants={ANIMATION_VARIANTS.item}
             className='text-center mb-12'
@@ -191,7 +195,7 @@ export default function Login() {
         >
           {/* Header */}
             <div className='text-center mb-4'>
-              <motion.div
+              {/* <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
@@ -205,7 +209,7 @@ export default function Login() {
                   decoding='async'
                   fetchPriority='high'
                 />
-              </motion.div>
+              </motion.div> */}
 
               <h1 className='text-3xl font-bold text-slate-800 dark:text-white mb-2'>
                 Welcome Back

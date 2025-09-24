@@ -21,6 +21,10 @@ import Footer from "./components/Footer";
 import AdminLogin from "./pages/admin/adminLogin";
 import UserDashboard from "./pages/dashboard/UserDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
+import UserLayout from "./pages/dashboard/UserLayout";
+import AdminLayout from "./pages/admin/AdminLayout";
+import { SidebarProvider } from "./context/SidebarContext.jsx";
 
 function AppContent() {
   const location = useLocation();
@@ -79,7 +83,10 @@ function AppContent() {
     <>
       <NavigationProgress />
       <div className='min-h-screen flex flex-col bg-white text-ink'>
-        <Header />
+        {!(
+          location.pathname.startsWith("/dashboard") ||
+          location.pathname.startsWith("/admin")
+        ) && <Header />}
         <main className='relative flex-1'>
           <Routes key={location.pathname}>
             <Route index element={<Home />} />
@@ -90,11 +97,50 @@ function AppContent() {
             <Route path='/privacy' element={<Privacy />} />
             <Route path='/contact' element={<Contact />} />
             <Route path='/admin/login' element={<AdminLogin />} />
-            <Route path='/dashboard' element={<UserDashboard />} />
-            <Route path='/admin/dashboard' element={<AdminDashboard />} />
+
+            {/** USER FLOW guarded */}
+            <Route element={<ProtectedRoute allowRoles={["user"]} />}>
+              <Route path='/dashboard' element={<UserLayout />}>
+                <Route index element={<UserDashboard />} />
+                <Route
+                  path='consignments'
+                  element={<div>Manage Consignments</div>}
+                />
+                <Route
+                  path='new-consignment'
+                  element={<div>New Consignment</div>}
+                />
+                <Route path='senders' element={<div>Manage Senders</div>} />
+                <Route path='receivers' element={<div>Manage Receivers</div>} />
+                <Route path='wallet'>
+                  <Route path='top-up' element={<div>Top Up</div>} />
+                  <Route
+                    path='transactions'
+                    element={<div>Transactions</div>}
+                  />
+                </Route>
+              </Route>
+            </Route>
+
+            {/** ADMIN FLOW guarded */}
+            <Route element={<ProtectedRoute allowRoles={["Admin"]} />}>
+              <Route path='/admin/dashboard' element={<AdminLayout />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path='users' element={<div>Manage Users</div>} />
+                <Route
+                  path='consignments'
+                  element={<div>Manage Consignments</div>}
+                />
+                <Route path='operations' element={<div>Operations</div>} />
+                <Route path='reports' element={<div>Reports</div>} />
+              </Route>
+            </Route>
           </Routes>
         </main>
-        <Footer />
+        {!(
+          location.pathname.startsWith("/dashboard") ||
+          location.pathname.startsWith("/admin")
+        ) && <Footer />}
       </div>
     </>
   );
@@ -105,7 +151,9 @@ export default function App() {
     <>
       <Toaster position='top-center' />
       <Router>
-        <AppContent />
+        <SidebarProvider>
+          <AppContent />
+        </SidebarProvider>
       </Router>
     </>
   );

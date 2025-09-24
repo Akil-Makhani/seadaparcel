@@ -1,14 +1,13 @@
 import { motion } from "framer-motion";
 import { useState, useEffect, useCallback } from "react";
 import debounce from "lodash/debounce";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Eye,
   EyeOff,
   Mail,
   Lock,
   ArrowRight,
-  Package,
   User,
   Phone,
   MapPin,
@@ -19,8 +18,6 @@ import toast from "react-hot-toast";
 import {
   getDomesticRegisterAddressApi,
   searchDomesticRegisterAddressApi,
-  createCompanyRegisterApi,
-  checkUserExistsApi,
   registerApi,
 } from "../services/apiFlow";
 import Loader from "../components/loader";
@@ -81,6 +78,8 @@ export default function Register() {
   const [isLookupDisabled, setIsLookupDisabled] = useState(false);
   const [selectedLookupAddress, setSelectedLookupAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  
 
   const debouncedHandleAddressLookup = useCallback(
     debounce(async (term) => {
@@ -225,16 +224,16 @@ export default function Register() {
       contactNumber: formData.phone,
       suburb: formData.suburb,
       password: formData.password,
-      IsUserBan: false,
-      country: "NZ",
+      unit: formData.unit,
     };
     setIsLoading(true);
     try {
       const response = await registerApi(payload);
-      if (response?.data?.status === "Success") {
+      if (response?.data?.success) {
         toast.success(
           "Account created successfully! Welcome to SENDAPARCEL 🎉"
         );
+        navigate('/login');
       } else {
         const message = response?.data?.message || "Registration failed";
         toast.error(message);
@@ -328,7 +327,7 @@ export default function Register() {
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
             {/* Header */}
-            <div className='text-center mb-8'>
+            {/* <div className='text-center mb-8'>
               <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -351,7 +350,7 @@ export default function Register() {
               <p className='text-slate-600 dark:text-slate-300'>
                 Join thousands of satisfied customers
               </p>
-            </div>
+            </div> */}
 
             {/* Registration Form */}
             <motion.form
@@ -362,7 +361,7 @@ export default function Register() {
               transition={{ delay: 0.4, duration: 0.5 }}
             >
               {/* Personal Information */}
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-6'>
                 <div className='space-y-2'>
                   <label className='block text-sm font-medium text-slate-700 dark:text-slate-300'>
                     First Name *
@@ -589,6 +588,23 @@ export default function Register() {
                 </div>
 
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                 <div className='space-y-2'>
+                    <label className='block text-sm font-medium text-slate-700 dark:text-slate-300'>
+                      Unit *
+                    </label>
+                    <input
+                      type='text'
+                      name='unit'
+                      value={formData.unit}
+                      onChange={handleInputChange}
+                      className={`${inputClass(!!errors.unit)} pl-4 pr-4`}
+                      placeholder='Unit number'
+                    />
+                    {errors.unit && (
+                      <p className='mt-1 text-xs text-red-600'>{errors.unit}</p>
+                    )}
+                  </div>
+
                   <div className='space-y-2'>
                     <label className='block text-sm font-medium text-slate-700 dark:text-slate-300'>
                       Street *
@@ -605,23 +621,6 @@ export default function Register() {
                       <p className='mt-1 text-xs text-red-600'>
                         {errors.street}
                       </p>
-                    )}
-                  </div>
-
-                  <div className='space-y-2'>
-                    <label className='block text-sm font-medium text-slate-700 dark:text-slate-300'>
-                      Unit *
-                    </label>
-                    <input
-                      type='text'
-                      name='unit'
-                      value={formData.unit}
-                      onChange={handleInputChange}
-                      className={`${inputClass(!!errors.unit)} pl-4 pr-4`}
-                      placeholder='Unit number'
-                    />
-                    {errors.unit && (
-                      <p className='mt-1 text-xs text-red-600'>{errors.unit}</p>
                     )}
                   </div>
                 </div>
