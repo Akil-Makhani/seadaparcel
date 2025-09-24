@@ -40,10 +40,8 @@ function AppContent() {
     // Handle hash navigation - scroll to top first, then to section
     useLayoutEffect(() => {
       if (location.hash) {
-        // If there's a hash, scroll to top first, then to the section
         window.scrollTo(0, 0);
       } else {
-        // No hash, just scroll to top
         window.scrollTo(0, 0);
       }
     }, [location.pathname]);
@@ -51,7 +49,6 @@ function AppContent() {
     useEffect(() => {
       NProgress.start();
 
-      // Handle hash navigation with smooth scroll
       if (location.hash) {
         const timer = setTimeout(() => {
           const element = document.querySelector(location.hash);
@@ -59,10 +56,9 @@ function AppContent() {
             element.scrollIntoView({ behavior: "smooth" });
           }
           NProgress.done();
-        }, 500); // Increased delay to ensure page is loaded
+        }, 500);
         return () => clearTimeout(timer);
       } else {
-        // Additional scroll to top with smooth behavior
         const timer = setTimeout(() => {
           try {
             window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
@@ -89,6 +85,7 @@ function AppContent() {
         ) && <Header />}
         <main className='relative flex-1'>
           <Routes key={location.pathname}>
+            {/* Public Routes */}
             <Route index element={<Home />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
@@ -98,7 +95,7 @@ function AppContent() {
             <Route path='/contact' element={<Contact />} />
             <Route path='/admin/login' element={<AdminLogin />} />
 
-            {/** USER FLOW guarded */}
+            {/* USER FLOW guarded */}
             <Route element={<ProtectedRoute allowRoles={["User"]} />}>
               <Route path='/dashboard' element={<UserLayout />}>
                 <Route index element={<UserDashboard />} />
@@ -114,15 +111,15 @@ function AppContent() {
                 <Route path='receivers' element={<div>Manage Receivers</div>} />
                 <Route path='wallet'>
                   <Route path='top-up' element={<div>Top Up</div>} />
-                    element={<div>Transactions</div>}
                   <Route
                     path='transactions'
+                    element={<div>Transactions</div>}
                   />
                 </Route>
               </Route>
             </Route>
 
-            {/** ADMIN FLOW guarded */}
+            {/* ADMIN FLOW guarded */}
             <Route element={<ProtectedRoute allowRoles={["Admin"]} />}>
               <Route path='/admin/dashboard' element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
