@@ -99,7 +99,7 @@ function AppContent() {
             <Route path='/admin/login' element={<AdminLogin />} />
 
             {/** USER FLOW guarded */}
-            <Route element={<ProtectedRoute allowRoles={["user"]} />}>
+            <Route element={<ProtectedRoute allowRoles={["User"]} />}>
               <Route path='/dashboard' element={<UserLayout />}>
                 <Route index element={<UserDashboard />} />
                 <Route
@@ -114,9 +114,9 @@ function AppContent() {
                 <Route path='receivers' element={<div>Manage Receivers</div>} />
                 <Route path='wallet'>
                   <Route path='top-up' element={<div>Top Up</div>} />
+                    element={<div>Transactions</div>}
                   <Route
                     path='transactions'
-                    element={<div>Transactions</div>}
                   />
                 </Route>
               </Route>

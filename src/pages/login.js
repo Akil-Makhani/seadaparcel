@@ -106,7 +106,7 @@ export default function Login() {
       if (response?.data?.success) {
         const token = response?.data?.data?.token || response?.data?.token || "user-demo-token";
         setToken(token);
-        setItemLocalStorage("role", response?.data?.data?.role);
+        setItemLocalStorage("role", response?.data?.role);
         toast.success("Login successful! Welcome back 🚚");
         navigate('/dashboard');
       } else {
